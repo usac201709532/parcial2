@@ -1,3 +1,8 @@
 201742012,jose sagastume,22S01,22S03
 201701026,jose marticorena,22S02,22S03
 201709532,jonathan lorenzo,22S01,22S02
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 011a7ff16e42acb59d4530cd101e89c3ee2b9cf7
