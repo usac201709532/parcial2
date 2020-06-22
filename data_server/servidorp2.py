@@ -130,7 +130,6 @@ class server():                   #verificaciones del servidor
           
 objeto = server()  
 objeto.start()
-#objeto.agregar('201742012')                                     
-#print(objeto.decoder('02$22S02$789'))        #respuesta
 
-#me cago si lo detecta
+
+#si aparece este cambio jona?
