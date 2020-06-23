@@ -1,0 +1,5 @@
+#Parametros de conexion
+MQTT_HOST = "157.245.82.242"
+MQTT_PORT = 1883
+MQTT_USER = "201742012"
+MQTT_PASS = "12345abc"
