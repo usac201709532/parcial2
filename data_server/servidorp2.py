@@ -13,6 +13,7 @@ from brok_dt import *    #Informacion de la conexion
 SERV_ADDR = '167.71.243.238'     #direccion
 SERV_PRT = 9822                  #puerto
 
+DEFAULT_DELAY = 1
 
 class server():                   #verificaciones del servidor
     
@@ -38,7 +39,7 @@ class server():                   #verificaciones del servidor
 
     def publishData(self, topicRoot, topicName, value, qos = 0, retain = False):
         topic = topicRoot + "/" + topicName
-        client.publish(topic, value, qos, retain)
+        self.client.publish(topicRoot, value, qos, retain)
 
 
 
@@ -169,33 +170,26 @@ class server():                   #verificaciones del servidor
         print('solicitud de transferencia de archivo')
           
 
-
-try:
-    while True:
-
-
-        #Para temperatura
-        for i in range(sensores.getSensorCount()):
-            publishData(SENSORES, (str(i) + "/" + TEMPERATURA), sensores.getTemperatura(i))
-            
-        
-        #Para humedad
-        for i in range(sensores.getSensorCount()):
-            publishData(SENSORES, (str(i) + "/" + HUMEDAD), sensores.getHumedad(i))
-
-        #Para presion
-        for i in range(sensores.getSensorCount()):
-            publishData(SENSORES, (str(i) + "/" + PRESION_A), sensores.getPresionA(i))
+    def ejecutar(self):
+        try:
+            while True:
 
 
-        logging.info("Los datos han sido enviados al broker")            
+                for i in range(25):
+                    self.publishData('200', (str(i) + "/" + str(200)),'200')
+                    
+                logging.info("Los datos han sido enviados al broker")            
 
-        #Retardo hasta la proxima publicacion de info
-        time.sleep(DEFAULT_DELAY)
+                #Retardo hasta la proxima publicacion de info
+                time.sleep(DEFAULT_DELAY)
 
-except KeyboardInterrupt:
-    logging.warning("Desconectando del broker MQTT...")
+        except KeyboardInterrupt:
+            logging.warning("Desconectando del broker MQTT...")
 
-finally:
-    client.disconnect()
-    logging.info("Se ha desconectado del broker. Saliendo...")
+        finally:
+            self.client.disconnect()
+            logging.info("Se ha desconectado del broker. Saliendo...")
+
+obyct = server()
+obyct.start()
+obyct.ejecutar()
