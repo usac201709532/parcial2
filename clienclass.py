@@ -1,17 +1,17 @@
 #Jose Fernando Marticorena Barrientos 201701026
-#
+#Jonathan Mardoqueo Lorenzo Lopez 201709532
 #
 
-import paho.mqtt.client as mqtt   #
-import logging                   #
-import time                      #       
-import os                        #   
-import logging
+import paho.mqtt.client as mqtt #
+import logging                  #
+import time                     #       
+import os                       #   
+import logging                  #JMLL para dar informacion
 import datetime                 #Para generar fecha/hora actual
 import binascii
 import threading                #Concurrencia con hilos
-from socket import socket
-from broker import *            #Informacion de la conexion
+from socket import socket       #JMLL para utilizar sockets 
+from broker import *            #JMLL Informacion de la conexion
 
 
 
@@ -60,26 +60,26 @@ class menu():                   #Clase
 
         subs()                                      #llamamos a la funcion subscribir
 
-        def enviar(destino):                        #funcion a llamar para enviar audios
-            f=open("enviado.wav", "rb")             #abrimos el archivo como f
-            fileContent = f.read()                  #luego almacenamos en filecontent
-            f.close()
-            byteArray = bytearray(fileContent)      #ingresamos el contenido en bytearray
-            client.publish(destino, byteArray)      #lo publicamos con el destino dado
-            print("----Audios Enviado-----")
+        def enviar(destino):                        #JMLL funcion a llamar para enviar audios
+            f=open("enviado.wav", "rb")             #JMLL abrimos el archivo como f
+            fileContent = f.read()                  #JMLL luego almacenamos en filecontent
+            f.close()                               #JMLL cerramos el archivo
+            byteArray = bytearray(fileContent)      #JMLL ingresamos el contenido en bytearray
+            client.publish(destino, byteArray)      #JMLL lo publicamos con el destino dado
+            print("----Audios Enviado-----")        #JMLL se imprime para indicar que el audio fue enviado exitosamente
 
-        def grabar(dur):                        #funcion a llamar para grabar audios
-            logging.basicConfig(
+        def grabar(dur):                        #JMLL funcion a llamar para grabar audios
+            logging.basicConfig(                #JMLL se utiliza logging para mostrar el mensaje
                 level = logging.DEBUG, 
                 format = '%(message)s'
                 )
 
-            logging.info('****COMIENZA LA GRABACION****')
-            os.system('arecord -d '+str(dur)+ ' -f U8 -r 8000 enviado.wav')
+            logging.info('****COMIENZA LA GRABACION****')                   #JMLL se indica que comienza la grabacion
+            os.system('arecord -d '+str(dur)+ ' -f U8 -r 8000 enviado.wav') #JMLL se graba el audio con la duracion variable
 
-            logging.info('------Grabacion finalizada, inicia reproduccion')
-            os.system('aplay enviado.wav')
-
+            logging.info('------Grabacion finalizada, inicia reproduccion') #JMLL se indica que la grbacion finalizo
+            os.system('aplay enviado.wav')                                  #JMLL se reproduce el audio que se 
+                                                                            #JMLL acaba de grabar
 
 
         while True:                                                  
@@ -148,9 +148,9 @@ class menu():                   #Clase
                             else:
                                 self.n =1
                         self.destino = 'audio/22/' + self.destino      #JFMB topic entero
-                        duracion = input('------Ingrese la duracion del audio(Seg.): ')     #pedimos el tiempo de grabacion
-                        grabar(duracion)            #llamamos funcion grabar con el valor de duracion
-                        enviar(self.destino)        #Luego de grabar enviamos el audio
+                        duracion = input('------Ingrese la duracion del audio(Seg.): ')     #JFMB pedimos el tiempo de grabacion
+                        grabar(duracion)            #JFMB llamamos funcion grabar con el valor de duracion
+                        enviar(self.destino)        #JFMB Luego de grabar enviamos el audio
                         #client.publish(self.destino, "@" + self.id)
 
 
@@ -171,7 +171,7 @@ class menu():                   #Clase
 
                 if(menu1 == '3'):               #JFMB LEER mensajes
                     print("Nuevos Mensajes: ")
-                    print("-----Hora/Fecha --------  Usuario----- MSM---")  #Si son de texto nos indica hora/usuario que mando/ msm
+                    print("-----Hora/Fecha --------  Usuario----- MSM---")  #JFMB Si son de texto nos indica hora/usuario que mando/ msm
                     for i in range(0,1):                        #JFMB ciclio para que revise bien si hay mensajes
                         client.on_message = self.on_message     # JFMB onmessage para que llame a la funcion si hay mensajes
                         client.loop_start()                     #JFMBel loop que inicia la busqueda de mensajes
@@ -180,13 +180,13 @@ class menu():                   #Clase
                     print("*****SI NO HAY MENSAJES SE RECOMIENDA:")
                     print("***** 5. RECONECTAR  O LOS MENSAJES ESTAN POR LLEGAR")                    #JFMB Si no hay mensajes se recomienda reconectr
 
-                if (menu1 == '4' ):                 # OP 4 recconectar 
-                    self.ejec()                     #basicamente vuelve a llamar a la funcion principal
-                    print('RECONECTANDO...')        #porque la conexion es muy corta y ya no se resiven msm despes de mucho tiempo
+                if (menu1 == '4' ):                 #JFMB OP 4 recconectar 
+                    self.ejec()                     #JFMB basicamente vuelve a llamar a la funcion principal
+                    print('RECONECTANDO...')        #JFMB porque la conexion es muy corta y ya no se resiven msm despes de mucho tiempo
 
-                if(menu1 == '5'):               # Op 5 salirr del programa
+                if(menu1 == '5'):               #JFMB Op 5 salirr del programa
                     print('ADIOS...')
-                    exit()                  #  exit para salir
+                    exit()                  #JFMB  exit para salir
 
 
 
