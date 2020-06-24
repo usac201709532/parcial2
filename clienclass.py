@@ -1,15 +1,15 @@
 #Jose Fernando Marticorena Barrientos 201701026
 #Jonathan Mardoqueo Lorenzo Lopez 201709532
-#
+#Jose Carlos Sagastume Ovalle 201742012
 
-import paho.mqtt.client as mqtt #
-import logging                  #
-import time                     #       
-import os                       #   
+import paho.mqtt.client as mqtt #JFMB para definirse como cliente
+import logging                  #FRMB para la depuracion
+import time                     #JCSO para manejar tiempos      
+import os                       #JFMB para manejar funcionalidades del sistema operativo  
 import logging                  #JMLL para dar informacion
-import datetime                 #Para generar fecha/hora actual
-import binascii
-import threading                #Concurrencia con hilos
+import datetime                 #JMLL Para generar fecha/hora actual
+import binascii                 #JCSO para manejar numeros binarios
+import threading                #JCSO Concurrencia con hilos
 from socket import socket       #JMLL para utilizar sockets 
 from broker import *            #JMLL Informacion de la conexion
 
@@ -17,38 +17,38 @@ from broker import *            #JMLL Informacion de la conexion
 
 
 
-class menu():                   #Clase
-    def __init__(self, id):
-        self.id = id
+class menu():                   #JCSO Clase para el menu
+    def __init__(self, id):      #JCSO constructor de la clase
+        self.id = id              #JCSO variables globales
         self.destino = ''
         self.mensaje = ''
         self.n = 0 
 
-    def ejec(self):
+    def ejec(self):                                     
 
-        client = mqtt.Client(clean_session=True)        # Nueva instancia de cliente
-        client.on_message = self.on_message             #
+        client = mqtt.Client(clean_session=True)        #JCSO Nueva instancia de cliente
+        client.on_message = self.on_message             
 
 
-        client.username_pw_set(MQTT_USER, MQTT_PASS)      #  Credenciales requeridas por el broker
-        client.connect(host = MQTT_HOST, port = MQTT_PORT) # Conectar al servidor remoto
-        client.subscribe(self.id)                           # Subscripcion a carne de usr sin embargo no se usa
-        #subcripcion a Usuario y Audios
-        def subs():                                     # Funcion para subcrcibir a todos los topicos
-            g = open("usuario","r")                     #Se abre el archivo en donde esta el usuario
+        client.username_pw_set(MQTT_USER, MQTT_PASS)      #JCSO Credenciales requeridas por el broker
+        client.connect(host = MQTT_HOST, port = MQTT_PORT) #JCSO Conectar al servidor remoto
+        client.subscribe(self.id)                           #JCSO Subscripcion a carnet de usuario, sin embargo no se usa
+        #JCSO subcripcion a Usuario y Audios
+        def subs():                                     #JCSO Funcion para subcrcibir a todos los topicos
+            g = open("usuario","r")                     #JCSO Se abre el archivo en donde esta el usuario
             while(True):
                 linea = g.readline()
-                linea = linea[:9]                        #guardamos en linea el carne o ID
+                linea = linea[:9]                        #JCSO guardamos en linea el carne o ID
                 if not linea:
                     break    
                 print("----------------------------- ")
-                print("BIENVENIDO CLIENTE " + linea)      #Al menu le damos la bienvenida al ID
-                self.id = linea                             #guardamos el id para usarlo luego
-                client.subscribe('usuarios/22/'+linea)        #Subscribimos a usarios y audios
+                print("BIENVENIDO CLIENTE " + linea)      #JCSO Al menu le damos la bienvenida al ID
+                self.id = linea                             #JCSO guardamos el id para usarlo luego
+                client.subscribe('usuarios/22/'+linea)        #JCSO Subscribimos a usarios y audios
                 client.subscribe('audio/22/'+linea)
             g.close()        
-            #Subscripciones a salas 
-            f = open("salas","r")                               #el mismo procedimeinto para salas de conver.
+            #JCSO Subscripciones a salas 
+            f = open("salas","r")                               #JCSO el mismo procedimeinto para salas de conver.
             while(True):
                 linea = f.readline()
                 linea = linea[:5]
@@ -58,7 +58,7 @@ class menu():                   #Clase
                 client.subscribe('audio/'+linea[:2]+'/'+linea[2:])
             f.close()
 
-        subs()                                      #llamamos a la funcion subscribir
+        subs()                                      #JCSO llamamos a la funcion subscribir
 
         def enviar(destino):                        #JMLL funcion a llamar para enviar audios
             f=open("enviado.wav", "rb")             #JMLL abrimos el archivo como f
@@ -83,8 +83,8 @@ class menu():                   #Clase
 
 
         while True:                                                  
-            #client.publish('hola', "alive")
-            #client.connect(host = MQTT_HOST, port = MQTT_PORT)
+            #JMLL client.publish('hola', "alive")
+            #JMLL client.connect(host = MQTT_HOST, port = MQTT_PORT)
             while True:
                 self.n=0
                 print("---------------------------- ")          #JFMB comenzamos lanzado un menu con las opciones
@@ -151,7 +151,7 @@ class menu():                   #Clase
                         duracion = input('------Ingrese la duracion del audio(Seg.): ')     #JFMB pedimos el tiempo de grabacion
                         grabar(duracion)            #JFMB llamamos funcion grabar con el valor de duracion
                         enviar(self.destino)        #JFMB Luego de grabar enviamos el audio
-                        #client.publish(self.destino, "@" + self.id)
+                        #JFMB client.publish(self.destino, "@" + self.id)
 
 
                     if(menu2 == '2'):                   #JFMB lo mismo para las salas...
@@ -184,7 +184,7 @@ class menu():                   #Clase
                     self.ejec()                     #JFMB basicamente vuelve a llamar a la funcion principal
                     print('RECONECTANDO...')        #JFMB porque la conexion es muy corta y ya no se resiven msm despes de mucho tiempo
 
-                if(menu1 == '5'):               #JFMB Op 5 salirr del programa
+                if(menu1 == '5'):               #JFMB Op 5 salir del programa
                     print('ADIOS...')
                     exit()                  #JFMB  exit para salir
 
@@ -193,27 +193,27 @@ class menu():                   #Clase
 
                 break
 
-    def on_message(self, client, userdata, msg):                #funcion antes mencionada si llegan mensajes
-        #Se muestra en pantalla informacion que ha llegado
-        tipo = str(msg.topic)                                   #Se ve que topic viene
+    def on_message(self, client, userdata, msg):                #JCSO funcion que si llegan mensajes los extrae de sus respectivos topic
+        #JCSO Se muestra en pantalla informacion que ha llegado
+        tipo = str(msg.topic)                                   #JCSO Se ve de que topic viene el mensaje
         tipo = tipo[:5]
-        if(tipo == 'audio'):                                        #si el topic es audio 
+        if(tipo == 'audio'):                                        #JCSOsverificai el topic es de audios 
             print("-------------" + tipo +  "-------------------")
             print("Reprodcir audio")            
-            f = open('recibido.wav', 'wb')                          #aca es donde guarda el audio recibido
+            f = open('recibido.wav', 'wb')                          #JCSO aca es donde se guarda el audioque fue recibido
             f.write(msg.payload)
             f.close()
-            os.system('aplay recibido.wav')                         # y lo reproducimos
+            os.system('aplay recibido.wav')                         #JCSO y lo reproducimos despues de recibirlo
             print("----------------------------------------------")   
-        else:                                                           #si no es audio es Texto
-                                                                #Mostrmaos el mensaje y la hora
-            print("-------------" + tipo +  "-------------------")
+        else:                                                           #JCSO en el caso contrario que sea audio, entonces es un texto
+                                                                
+            print("-------------" + tipo +  "-------------------")    #JCSO Mostramos el mensaje y la hora en que fue recibido
             print(str(datetime.datetime.now().ctime()) + ": " +str(msg.payload.decode("utf-8")))
             print("----------------------------------------------")  
             
         
-deunavariable = menu('user')
+deunavariable = menu('user')           #JCSO llamamos a la clase 
 
-deunavariable.ejec()
+deunavariable.ejec()                    #JCSO y ejecutamos la clase
 
 
